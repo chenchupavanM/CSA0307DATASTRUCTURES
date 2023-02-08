@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+int main(void)
+{
+    int number, i;
+    int fib1 = 0, fib2 = 1, next;
+    printf("Enter the number of terms: ");
+    scanf("%d", &number);
+    printf("Fibonacci series: %d %d", fib1, fib2);
+    for (i = 2; i < number; i++)
+    {
+        next = fib1 + fib2;
+        fib1 = fib2;
+        fib2 = next;
+        printf(" %d", next);
+    }
+    printf("\n");
+return 0;
+}
