@@ -1,0 +1,71 @@
+class Node:
+    def _init_(self, key):
+        self.key = key
+        self.left = None
+        self.right = None
+        self.height = 1
+
+class AVLTree:
+    def get_height(self, node):
+        if not node:
+            return 0
+        return node.height
+    
+    def get_balance(self, node):
+        if not node:
+            return 0
+        return self.get_height(node.left) - self.get_height(node.right)
+    
+    def right_rotate(self, node):
+        left_child = node.left
+        t2 = left_child.right
+        left_child.right = node
+        node.left = t2
+        node.height = max(self.get_height(node.left), self.get_height(node.right)) + 1
+        left_child.height = max(self.get_height(left_child.left), self.get_height(left_child.right)) + 1
+        return left_child
+    
+    def left_rotate(self, node):
+        right_child = node.right
+        t2 = right_child.left
+        right_child.left = node
+        node.right = t2
+        node.height = max(self.get_height(node.left), self.get_height(node.right)) + 1
+        right_child.height = max(self.get_height(right_child.left), self.get_height(right_child.right)) + 1
+        return right_child
+    
+    def insert(self, root, key):
+        if not root:
+            return Node(key)
+        elif key < root.key:
+            root.left = self.insert(root.left, key)
+        else:
+            root.right = self.insert(root.right, key)
+        root.height = max(self.get_height(root.left), self.get_height(root.right)) + 1
+        balance = self.get_balance(root)
+        if balance > 1 and key < root.left.key:
+            return self.right_rotate(root)
+        if balance < -1 and key > root.right.key:
+            return self.left_rotate(root)
+        if balance > 1 and key > root.left.key:
+            root.left = self.left_rotate(root.left)
+            return self.right_rotate(root)
+        if balance < -1 and key < root.right.key:
+            root.right = self.right_rotate(root.right)
+            return self.left_rotate(root)
+        return root
+    
+    def delete(self, root, key):
+        if not root:
+            return None
+        elif key < root.key:
+            root.left = self.delete(root.left, key)
+        elif key > root.key:
+            root.right = self.delete(root.right, key)
+        else:
+            if not root.left:
+                return root.right
+            elif not root.right:
+                return root.left
+            else:
+                successor = root.right
