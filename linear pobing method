@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TABLE_SIZE 13
+
+int hash_table[TABLE_SIZE];
+
+// Function to initialize hash table
+void init_table() {
+  for (int i = 0; i < TABLE_SIZE; i++) {
+    hash_table[i] = -1;
+  }
+}
+
+// Hash function to calculate the index
+int hash_function(int key) {
+  return key % TABLE_SIZE;
+}
+
+// Function to insert a key into hash table
+void insert_key(int key) {
+  int index = hash_function(key);
+  
+  // Linear probing
+  while (hash_table[index] != -1) {
+    index = (index + 1) % TABLE_SIZE;
+  }
+  hash_table[index] = key;
+}
+
+// Function to search for a key in the hash table
+int search_key(int key) {
+  int index = hash_function(key);
+
+  // Linear probing
+  int counter = 0;
+  while (hash_table[index] != -1 && counter < TABLE_SIZE) {
+    if (hash_table[index] == key) {
+      return index;
+    }
+    index = (index + 1) % TABLE_SIZE;
+    counter++;
+  }
+  return -1;
+}
+
+int main() {
+  init_table();
+  
+  // Insert keys into the hash table
+  insert_key(18);
+  insert_key(41);
+  insert_key(22);
+  insert_key(44);
+  insert_key(59);
+  insert_key(32);
+  insert_key(31);
+  insert_key(73);
+  
+  // Search for a key in the hash table
+  int search_key = 31;
+  int index = search_key(search_key);
+  if (index == -1) {
+    printf("Key not found in hash table\n");
+  } else {
+    printf("Key found at index: %d\n", index);
+  }
+  
+  return 0;
+}
